@@ -4,32 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="gui test">
-      <change afterPath="$PROJECT_DIR$/providers.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerMain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Doctor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Imaging.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Location.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Patient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Person.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Profile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Provider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Radiology.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Specialty.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Technician.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Timeslot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/clinic/Visit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/CircularLinkedList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/Date.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/List.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/Node.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/Sort.java" afterDir="false" />
+    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="gui">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/Appointment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/HelloApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/HelloController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/clinic/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/clinic/hello-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +55,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.ClinicManagerMain.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
@@ -111,11 +89,20 @@
       <option name="project" value="LOCAL" />
       <updated>1729804031475</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="gui">
+      <option name="closed" value="true" />
+      <created>1729804701774</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1729804701774</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="gui test" />
-    <option name="LAST_COMMIT_MESSAGE" value="gui test" />
+    <MESSAGE value="gui" />
+    <option name="LAST_COMMIT_MESSAGE" value="gui" />
   </component>
 </project>

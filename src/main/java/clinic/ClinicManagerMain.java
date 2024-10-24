@@ -8,17 +8,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ClinicManagerMain extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(ClinicManagerMain.class.getResource("hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
+        stage.setTitle("Clinic Manager - Scheduling Office/Imaging Appointments!");
+        stage.setScene(scene);
+        stage.show();
+    }
 
     public static void main(String[] args) {
         launch();
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ClinicManagerMain.class.getResource("clinic-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),500,500);
-        primaryStage.setTitle("Clinic Manager - Scheduling Office/Imaging Appointments!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 }
