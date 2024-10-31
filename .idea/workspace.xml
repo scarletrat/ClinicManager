@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="scene builder">
+    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="gui">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/clinic/clinic-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/clinic/clinic-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/Location.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/Location.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,20 +56,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.ClinicManagerMain.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/swimd/OneDrive/Desktop/cs213/ClinicProject",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ClinicManagerMain.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/swimd/Downloads/EventHandlerInterface/EventHandlerInterface&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -109,21 +108,12 @@
       <option name="project" value="LOCAL" />
       <updated>1729805014989</updated>
     </task>
-    <task id="LOCAL-00005" summary="scene builder">
-      <option name="closed" value="true" />
-      <created>1730392894437</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1730392894437</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="gui test" />
     <MESSAGE value="gui" />
-    <MESSAGE value="scene builder" />
-    <option name="LAST_COMMIT_MESSAGE" value="scene builder" />
+    <option name="LAST_COMMIT_MESSAGE" value="gui" />
   </component>
 </project>

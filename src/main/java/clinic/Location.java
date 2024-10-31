@@ -16,7 +16,7 @@ public enum Location {
 
     private final String county;
     private final String zip;
-
+    private final String name = this.name();
     /**
      * Constructor setting instance variables to parameters
      * @param county county variable

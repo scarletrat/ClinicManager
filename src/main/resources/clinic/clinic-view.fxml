@@ -121,7 +121,7 @@
                      <children>
                         <TableView fx:id="tbl_location" layoutX="25.0" layoutY="14.0" prefHeight="307.0" prefWidth="534.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="City" />
+                            <TableColumn fx:id="col_city" prefWidth="75.0" text="City" />
                             <TableColumn fx:id="col_county" prefWidth="75.0" text="County" />
                               <TableColumn fx:id="col_zip" prefWidth="75.0" text="Zip" />
                           </columns>

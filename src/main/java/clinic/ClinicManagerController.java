@@ -1,8 +1,10 @@
 package clinic;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -78,10 +80,7 @@ public class ClinicManagerController {
 
         col_zip.setCellValueFactory(new PropertyValueFactory<>("zip"));
         col_county.setCellValueFactory(new PropertyValueFactory<>("county"));
-        for(int i = 0; i <locations.size();i++){
-            col_city.setCellValueFactory(new PropertyValueFactory<>((locations.get(i).getName())));
-        }
-
+        col_city.setCellValueFactory(new PropertyValueFactory<>("name"));
     }
 
 
