@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="TableView">
+    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="Schedule regular">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/Appointment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/Person.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/Date.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/Date.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/Doctor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/Doctor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/clinic/clinic-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/clinic/clinic-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
