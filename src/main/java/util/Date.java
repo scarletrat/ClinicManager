@@ -38,6 +38,18 @@ public class Date implements Comparable<Date> {
      * @param month the month of the date.
      * @param day the day of the date.
      */
+    public Date(String month, String day, String year){
+        this.year = Integer.parseInt(year);
+        this.month = Integer.parseInt(month);
+        this.day = Integer.parseInt(day);
+    }
+
+    /**
+     * Constructor with 3 parameters.
+     * @param year the year of the date.
+     * @param month the month of the date.
+     * @param day the day of the date.
+     */
     public Date(int month, int day, int year){
         this.year = year;
         this.month = month;

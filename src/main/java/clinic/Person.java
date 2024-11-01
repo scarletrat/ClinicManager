@@ -1,4 +1,7 @@
 package clinic;
+
+import util.Date;
+
 /**
  * This class represents a Person object and contains a profile.
  * @author Gordon Lin, Christopher Lee modified Oct. 17, 2024
@@ -28,6 +31,16 @@ public class Person {
      * @param dob date of birth variable
      */
     public Person(String fname, String lname, String dob){
+        this.profile = new Profile(fname,lname,dob);
+    }
+
+    /**
+     * Constructor setting instance variable to parameters
+     * @param fname first name variable
+     * @param lname last name variable
+     * @param dob date of birth variable
+     */
+    public Person(String fname, String lname, Date dob){
         this.profile = new Profile(fname,lname,dob);
     }
 

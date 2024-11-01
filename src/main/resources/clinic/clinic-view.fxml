@@ -30,7 +30,7 @@
                                  <GridPane.margin>
                                     <Insets right="10.0" top="10.0" />
                                  </GridPane.margin></Label>
-                                        <DatePicker prefHeight="25.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                        <DatePicker fx:id="aptDate" prefHeight="25.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
                                  <GridPane.margin>
                                     <Insets top="10.0" />
                                  </GridPane.margin></DatePicker>
@@ -40,15 +40,15 @@
                                  </GridPane.margin></Label>
                                         <VBox prefHeight="117.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                             <children>
-                                                <TextField prefHeight="25.0" prefWidth="292.0" promptText="first name">
+                                                <TextField fx:id="fname" prefHeight="25.0" prefWidth="292.0" promptText="first name">
                                        <VBox.margin>
                                           <Insets top="10.0" />
                                        </VBox.margin></TextField>
-                                                <TextField promptText="last name">
+                                                <TextField fx:id="lname" promptText="last name">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin></TextField>
-                                                <DatePicker prefHeight="25.0" prefWidth="170.0" promptText="date of birth">
+                                                <DatePicker fx:id="birthDate" prefHeight="25.0" prefWidth="170.0" promptText="date of birth">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin></DatePicker>
@@ -83,7 +83,7 @@
                                  </children></HBox>
                                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
-                                    <Button mnemonicParsing="false" prefWidth="110.0" text="Schedule">
+                                    <Button fx:id="schedule" mnemonicParsing="false" onAction="#scheduleApt" prefWidth="110.0" text="Schedule">
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
@@ -99,7 +99,7 @@
                                     <Insets left="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button mnemonicParsing="false" prefWidth="100.0" text="clear" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.valignment="TOP">
+                              <Button mnemonicParsing="false" onAction="#clear" prefWidth="100.0" text="clear" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.valignment="TOP">
                                  <GridPane.margin>
                                     <Insets left="10.0" />
                                  </GridPane.margin>
