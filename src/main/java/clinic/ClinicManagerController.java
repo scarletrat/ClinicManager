@@ -24,6 +24,7 @@ public class ClinicManagerController {
     private final List<Technician> technicians = new List<>();
     private final CircularLinkedList rotation = new CircularLinkedList();
     private final List<Patient> patients = new List<>();
+    ObservableList<String> providerNames;
 
 
     @FXML
@@ -65,7 +66,6 @@ public class ClinicManagerController {
     private TextField fname;
     @FXML
     private TextField lname;
-    ObservableList<String> providerNames;
     @FXML
     /**
      * This method is automatically performed after the fxml file is loaded.
@@ -191,8 +191,8 @@ public class ClinicManagerController {
      */
     void imagingSelected(ActionEvent event) {
         if(imagingApt.isSelected()){
-            ObservableList<Specialty> specialties =
-                    FXCollections.observableArrayList(Specialty.values());
+            ObservableList<Radiology.Service> specialties =
+                    FXCollections.observableArrayList(Radiology.Service.values());
             cmb_provider.setItems(convertSpecialtyListToStringList(specialties));
             cmb_provider.setPromptText("Type");
         }
@@ -202,11 +202,12 @@ public class ClinicManagerController {
         }
     }
 
-    public ObservableList<String> convertSpecialtyListToStringList(ObservableList<Specialty> specialtyList) {
+    public ObservableList<String> convertSpecialtyListToStringList(ObservableList<Radiology.Service> specialtyList) {
         return specialtyList.stream()
-                .map(Specialty::toString) // Map each Specialty to its name
+                .map(Radiology.Service::toString) // Map each Specialty to its name
                 .collect(Collectors.toCollection(FXCollections::observableArrayList));
     }
+
     @FXML
     /**
      * Schedule an appointment
