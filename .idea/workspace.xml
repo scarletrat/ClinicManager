@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="Schedule regular">
+    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="TableView">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/clinic/Specialty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/Specialty.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
