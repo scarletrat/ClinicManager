@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class ClinicManagerController {
     private List<Appointment> appointments = new List<>();
@@ -38,6 +39,8 @@ public class ClinicManagerController {
 
     @FXML
     private ComboBox<String> cmb_provider;
+    @FXML
+    private ComboBox<String> cmb_specialty;
     @FXML
     private ComboBox<String> cmb_timeslot;
     @FXML
@@ -62,7 +65,7 @@ public class ClinicManagerController {
     private TextField fname;
     @FXML
     private TextField lname;
-
+    ObservableList<String> providerNames;
     @FXML
     /**
      * This method is automatically performed after the fxml file is loaded.
@@ -144,7 +147,7 @@ public class ClinicManagerController {
             names[i] = profile.getFname() + " " + profile.getLname() + " (" + ((Doctor) providers.get(i)).getnpi() + ")";
         }
 
-    ObservableList<String> providerNames =
+    providerNames =
             FXCollections.observableArrayList(names);
         cmb_provider.setItems(providerNames);
         outputArea.appendText("Providers Loaded\n");
@@ -187,9 +190,23 @@ public class ClinicManagerController {
      * An event handler to disable Provider comboBox when Imaging is selected.
      */
     void imagingSelected(ActionEvent event) {
-        cmb_provider.setDisable(imagingApt.isSelected());
+        if(imagingApt.isSelected()){
+            ObservableList<Specialty> specialties =
+                    FXCollections.observableArrayList(Specialty.values());
+            cmb_provider.setItems(convertSpecialtyListToStringList(specialties));
+            cmb_provider.setPromptText("Type");
+        }
+        else{
+            cmb_provider.setItems(providerNames);
+            cmb_provider.setPromptText("Providers");
+        }
     }
 
+    public ObservableList<String> convertSpecialtyListToStringList(ObservableList<Specialty> specialtyList) {
+        return specialtyList.stream()
+                .map(Specialty::toString) // Map each Specialty to its name
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+    }
     @FXML
     /**
      * Schedule an appointment

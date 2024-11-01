@@ -11,7 +11,6 @@ public enum Specialty {
     ALLERGIST(350);
 
     private final int charge;
-
     /**
      * Constructor setting instance variable to parameter
      * @param charge charge variable
