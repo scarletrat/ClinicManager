@@ -11,6 +11,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import util.*;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
@@ -27,7 +28,6 @@ public class ClinicManagerController {
 
     @FXML
     TableView tbl_location;
-
     @FXML
     private TableColumn<Location, String> col_zip;
     @FXML
@@ -35,11 +35,10 @@ public class ClinicManagerController {
     @FXML
     private TableColumn<Location, Location> col_city;
 
-
     @FXML
     private ComboBox<String> cmb_provider;
     @FXML
-    private ComboBox<String> cmb_specialty;
+    private ComboBox<String> cmb_options;
     @FXML
     private ComboBox<String> cmb_timeslot;
     @FXML
@@ -65,12 +64,13 @@ public class ClinicManagerController {
     @FXML
     private TextField lname;
     ObservableList<String> providerNames;
+
     @FXML
     /**
      * This method is automatically performed after the fxml file is loaded.
      * Set the initial values for the GUI objects here.
      */
-    public void initialize() {
+    void initialize() {
         String[] time = new String[12];
         for (int i = 1; i < 13; i++) {
             Timeslot timeslot = new Timeslot(String.valueOf(i));
@@ -88,8 +88,11 @@ public class ClinicManagerController {
         col_county.setCellValueFactory(new PropertyValueFactory<>("county"));
         col_city.setCellValueFactory(new PropertyValueFactory<>("name"));
         outputArea.appendText("Clinic Manager is running...\n");
-    }
 
+        String[] options = {"Appointments by date","Appointments by patient","Appointments by location","Office Appointments","Imaging Appointments","Providers' credit amount","Patients' bill"};
+        ObservableList<String> optionsList = FXCollections.observableArrayList(options);
+        cmb_options.setItems(optionsList);
+    }
 
     @FXML
     /**
@@ -102,6 +105,9 @@ public class ClinicManagerController {
                 new ExtensionFilter("All Files", "*.*"));
         Stage stage = new Stage();
         File sourceFile = chooser.showOpenDialog(stage); //get the reference of the source file
+        if(sourceFile == null){
+            return;
+        }
         loadProvidersFromFile(sourceFile, providers, technicians);
         updateProvidersTable(providers);
         displayProviderList();
@@ -109,6 +115,12 @@ public class ClinicManagerController {
         createRotation();
     }
 
+    /**
+     *Load providers from input txt file.
+     * @param file the file.
+     * @param providers providers list.
+     * @param technicians technicians list.
+     */
     private void loadProvidersFromFile(File file, List<Provider> providers, List<Technician> technicians) {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
@@ -135,6 +147,10 @@ public class ClinicManagerController {
         }
     }
 
+    /**
+     * Updates the providers comboBox
+     * @param providers the providers list
+     */
     private void updateProvidersTable(List<Provider> providers) {
         int size = providers.size()- technicians.size();
         String[] names = new String[size];
@@ -146,11 +162,18 @@ public class ClinicManagerController {
             names[i] = profile.getFname() + " " + profile.getLname() + " (" + ((Doctor) providers.get(i)).getnpi() + ")";
         }
 
-    providerNames =
-            FXCollections.observableArrayList(names);
+        providerNames = FXCollections.observableArrayList(names);
         cmb_provider.setItems(providerNames);
         outputArea.appendText("Providers Loaded\n");
         loadButton.setDisable(true);
+        if(imagingApt.isSelected()){
+            ObservableList<String> services = FXCollections.observableArrayList();
+            for (Radiology.Service service : Radiology.Service.values()) {
+                services.add(service.toString()); // Or specialty.toString()
+            }
+            cmb_provider.setItems(services);
+            cmb_provider.setPromptText("Service");
+        }
     }
 
     /**
@@ -190,12 +213,12 @@ public class ClinicManagerController {
      */
     void imagingSelected(ActionEvent event) {
         if(imagingApt.isSelected()){
-            ObservableList<String> specialties = FXCollections.observableArrayList();
-            for (Specialty specialty : Specialty.values()) {
-                specialties.add(specialty.toString()); // Or specialty.toString()
+            ObservableList<String> services = FXCollections.observableArrayList();
+            for (Radiology.Service service : Radiology.Service.values()) {
+                services.add(service.toString()); // Or specialty.toString()
             }
-            cmb_provider.setItems(specialties);
-            cmb_provider.setPromptText("Type");
+            cmb_provider.setItems(services);
+            cmb_provider.setPromptText("Imaging Type");
         }
         else{
             cmb_provider.setItems(providerNames);
@@ -264,6 +287,138 @@ public class ClinicManagerController {
         if(!checkTimeslot()){
             return;
         }
+        if(cmb_provider.getValue()==null){
+            outputArea.appendText("Please select an Imaging Service.\n");
+            return;
+        }
+        Person patient = getPatient();
+        if(!isValidAppointment(patient.getProfile(),getAptDate(),getTimeslot())) {
+            outputArea.appendText(patient.getProfile() + (" has an existing appointment at the same time slot.\n"));
+            return;
+        }
+        Radiology radiology = new Radiology(cmb_provider.getValue());
+        int currentServices = isServiceAvailable(getTimeslot(), getAptDate(), radiology);
+        if(currentServices>=2) {
+            outputArea.appendText("Cannot find an available technician at all locations for " + radiology.getService()
+                    + " at " + cmb_timeslot.getValue() + ".\n");
+            return;
+        }
+        Technician technician = null;
+        if(currentServices == 1) {
+            technician = findTechnician(findLocation(getAptDate(), getTimeslot(), radiology), getAptDate(), getTimeslot());
+        } else if (currentServices ==0) {
+            technician = findTechnician(getAptDate(), getTimeslot());
+        }
+        Appointment imaging = new Imaging(getAptDate(), getTimeslot(), patient, cmb_provider.getValue(), technician);
+        appointments.add(imaging);
+        outputArea.appendText(imaging + " booked.\n");
+    }
+
+    /**
+     * This method check if the imaging service is available.
+     * @param timeslot the timeslot of the appointment.
+     * @param date the date of the appointment.
+     * @param service the imaging service.
+     * @return return 0 if the service is available in all locations,
+     * return 1 if the service is available in only 1 location.
+     * return 2 if all locations are booked.
+     */
+    private int isServiceAvailable(Timeslot timeslot, Date date, Radiology service){
+        int count = 0;
+        for (int i = 0; i < appointments.size(); i++){
+            if(appointments.get(i) instanceof Imaging){
+                if(appointments.get(i).getDate().equals(date)
+                        &&appointments.get(i).getTimeslot().equals(timeslot)
+                        &&service.getService().equals(((Imaging)appointments.get(i)).getRadiology().getService())){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * This method check if the technician is available at the time and date.
+     * @param date the date of the appointment.
+     * @param timeslot the timeslot of the appointment.
+     * @param technician the technician that we're checking.
+     * @return return true if the technician is available,
+     * return false otherwise.
+     */
+    private boolean isTechnicianFree(Date date, Timeslot timeslot, Technician technician)  {
+        for(int i = 0; i < appointments.size(); i++){
+            Sort.appointment(appointments,'I');
+            Appointment appointment = appointments.get(i);
+            if(appointment instanceof Imaging){
+                if(appointment.getDate( ).equals(date) && appointment.getTimeslot().equals(timeslot) && appointment.getProvider().getProfile().equals(technician.getProfile()))
+                    return false;
+            }else{
+                break;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This method find the available technician in the date and timeslot and one that's not on the location listed.
+     * @param location the location that's not available.
+     * @param date the date of the appointment.
+     * @param timeslot the timeslot of the appointment.
+     * @return return technician that's available at the specified constraints.
+     */
+    private Technician findTechnician(Location location, Date date, Timeslot timeslot){
+        for(int i = 0; i < rotation.getSize(); i++){
+            rotation.setLast(rotation.getLast().getNext());
+            Technician technician = rotation.getLast().getData();
+            if(!technician.getLocation().equals(location) && isTechnicianFree(date,timeslot,technician)){
+                return technician;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * This method find the available technician in the date and timeslot,
+     * given that all locations are available.
+     * @param date the date of the appointment.
+     * @param timeslot the timeslot of the appointment.
+     * @return return technician.
+     */
+    private Technician findTechnician(Date date, Timeslot timeslot) {
+        for (int i = 0; i < rotation.getSize(); i++) {
+            // Move to the next technician
+            rotation.setLast(rotation.getLast().getNext());
+            Technician technician = rotation.getLast().getData();
+            // Check if the current technician is free
+            if (isTechnicianFree(date, timeslot, technician)) {
+                return technician;
+            }
+        }
+        // Return null if no technician is found
+        return null;
+    }
+
+    /**
+     * This method find the location give the date, timeslot, and imaging service appointment.
+     * @param date the date of the appointment.
+     * @param timeslot the timeslot of the appointment.
+     * @param service the service.
+     * @return return the location of the imaging appointment.
+     */
+    private Location findLocation(Date date, Timeslot timeslot, Radiology service) {
+        for (int i = 0; i < appointments.size(); i++) {
+            Sort.appointment(appointments,'I');
+            Appointment appointment = appointments.get(i);
+            if(appointment instanceof Imaging){
+                if(appointment.getDate().equals(date) && appointment.getTimeslot().equals(timeslot) && ((Imaging) appointment).getRadiology().equals(service)){
+                    Technician technician = (Technician) appointment.getProvider();
+                    return technician.getLocation();
+                }
+            }else{
+                break;
+            }
+        }
+        return null;
     }
 
     /**
@@ -563,11 +718,42 @@ public class ClinicManagerController {
     }
 
     @FXML
+    void printButton(ActionEvent event){
+        if(cmb_options.getValue()==null){
+            outputArea.appendText("Select an print option.\n");
+            return;
+        }
+        int index = cmb_options.getSelectionModel().getSelectedIndex();
+        switch (index) {
+            case 0:
+                PA_Command();
+                break;
+            case 1:
+                PP_Command();
+                break;
+            case 2:
+                PL_Command();
+                break;
+            case 3:
+                PO_Command();
+                break;
+            case 4:
+                PI_Command();
+                break;
+            case 5:
+                PC_Command();
+                break;
+            case 6:
+                PS_Command();
+                break;
+        }
+    }
+
     /**
      * This method does the PA command. Print the list of appointments;
      * ordered by date/time/provider.
      */
-    void PA_Command(){
+    private void PA_Command(){
         if (!appointments.isEmpty()) {
             Sort.appointment(appointments, 'A');
             outputArea.appendText("\n** List of appointments, ordered by date/time/provider.\n");
@@ -580,12 +766,11 @@ public class ClinicManagerController {
         }
     }
 
-    @FXML
     /**
      *This method does the PP command. Print the list of appointments;
      * ordered by patient/date/time.
      */
-    void PP_Command() {
+    private void PP_Command() {
         if (!appointments.isEmpty()) {
             Sort.appointment(appointments, 'P');
             outputArea.appendText("\n** List of appointments, ordered by patient/date/time.\n");
@@ -598,12 +783,11 @@ public class ClinicManagerController {
         }
     }
 
-    @FXML
     /**
      * This method does the PL command. Print the list of appointments;
      * ordered by patient/date/time.
      */
-    void PL_Command() {
+    private void PL_Command() {
         if (!appointments.isEmpty()) {
             Sort.appointment(appointments, 'L');
             outputArea.appendText("\n** List of appointments, ordered by county/date/time.\n");
@@ -616,11 +800,10 @@ public class ClinicManagerController {
         }
     }
 
-    @FXML
     /**
      * This method does the PS command. Print the bill of the patients.
      */
-    void PS_Command(){
+    private void PS_Command(){
         if(appointments.isEmpty()) {
             outputArea.appendText("Schedule calendar is empty.\n");
             return;
@@ -663,12 +846,11 @@ public class ClinicManagerController {
         }
     }
 
-    @FXML
     /**
      * This method does the PO command. Print the list of Office type appointments;
      * ordered by county/date/time.
      */
-    void PO_Command(){
+    private void PO_Command(){
         if (!appointments.isEmpty()) {
             Sort.appointment(appointments, 'O');
             outputArea.appendText("\n** List of office appointments ordered by county/date/time.\n");
@@ -682,12 +864,11 @@ public class ClinicManagerController {
         }
     }
 
-    @FXML
     /**
      * This method does the PI command. Print the list of imaging appointments;
      * ordered by county/date/time.
      */
-    void PI_Command(){
+    private void PI_Command(){
         if (!appointments.isEmpty()) {
             Sort.appointment(appointments, 'I');
             outputArea.appendText("\n** List of radiology appointments ordered by county/date/time.\n");
@@ -702,12 +883,11 @@ public class ClinicManagerController {
         }
     }
 
-    @FXML
     /**
      * This method does the PC command. Print the list of expected credit amounts;
      * for providers for seeing patients, sorted by provider profile.
      */
-    void PC_Command(){
+    private void PC_Command(){
         if(appointments.isEmpty()){
             outputArea.appendText("Schedule calendar is empty.\n");
             return;
@@ -743,7 +923,6 @@ public class ClinicManagerController {
         }
         return money;
     }
-
 
     @FXML
     /**
