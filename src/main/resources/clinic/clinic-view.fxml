@@ -15,8 +15,8 @@
                                 <GridPane layoutX="16.0" layoutY="30.0" prefHeight="289.0" prefWidth="539.0" style="-fx-border-color: blue;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="227.0" minWidth="10.0" prefWidth="150.6" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="342.6" minWidth="10.0" prefWidth="251.39999999999998" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.2" minWidth="10.0" prefWidth="171.80000000000007" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="342.6" minWidth="10.0" prefWidth="238.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.2" minWidth="10.0" prefWidth="184.0" />
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
@@ -99,19 +99,22 @@
                                     <Insets left="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#clear" prefWidth="100.0" text="clear" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.valignment="TOP">
+                              <Button mnemonicParsing="false" onAction="#clear" prefWidth="100.0" text="Clear" GridPane.columnIndex="2" GridPane.rowIndex="4" GridPane.valignment="TOP">
                                  <GridPane.margin>
                                     <Insets left="10.0" />
                                  </GridPane.margin>
                               </Button>
-                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+                              <HBox prefHeight="70.0" prefWidth="164.0" GridPane.columnIndex="2">
                                  <children>
                                     <ComboBox fx:id="cmb_options" prefWidth="90.0" promptText="Options" visibleRowCount="4">
                                        <HBox.margin>
-                                          <Insets right="5.0" />
+                                          <Insets right="4.0" top="10.0" />
                                        </HBox.margin>
                                     </ComboBox>
-                                    <Button mnemonicParsing="false" onAction="#printButton" text="Print" />
+                                    <Button mnemonicParsing="false" onAction="#printButton" text="Display">
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin></Button>
                                  </children>
                               </HBox>
                                     </children>
@@ -189,7 +192,7 @@
                                           <Insets right="10.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#clearR" prefWidth="120.0" text="Clear" />
+                                    <Button mnemonicParsing="false" onAction="#clear" prefWidth="120.0" text="Clear" />
                                  </children>
                               </HBox>
                            </children>
@@ -199,13 +202,13 @@
                 </Tab>
                 <Tab text="Clinic Locations">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="336.0" prefWidth="579.0">
                      <children>
-                        <TableView fx:id="tbl_location" layoutX="25.0" layoutY="14.0" prefHeight="307.0" prefWidth="534.0">
+                        <TableView fx:id="tbl_location" layoutX="25.0" layoutY="17.0" prefHeight="230.0" prefWidth="360.0">
                           <columns>
-                            <TableColumn fx:id="col_city" prefWidth="75.0" text="City" />
-                            <TableColumn fx:id="col_county" prefWidth="75.0" text="County" />
-                              <TableColumn fx:id="col_zip" prefWidth="75.0" text="Zip" />
+                            <TableColumn fx:id="col_city" prefWidth="120.0" text="City" />
+                            <TableColumn fx:id="col_county" prefWidth="120.0" text="County" />
+                              <TableColumn fx:id="col_zip" prefWidth="120.0" text="Zip" />
                           </columns>
                         </TableView>
                      </children></AnchorPane>

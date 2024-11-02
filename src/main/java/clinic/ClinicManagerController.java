@@ -10,15 +10,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import util.*;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Time;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Scanner;
 
+/**
+ * This class is the code for all action events in the gui design
+ * @author Gordon Lin, Christopher Lee modified Nov. 2 2024
+ */
 public class ClinicManagerController {
     private List<Appointment> appointments = new List<>();
     private final List<Provider> providers = new List<>();
@@ -848,7 +849,7 @@ public class ClinicManagerController {
     @FXML
     void printButton(ActionEvent event){
         if(cmb_options.getValue()==null){
-            outputArea.appendText("Select an print option.\n");
+            outputArea.appendText("Select an option.\n");
             return;
         }
         int index = cmb_options.getSelectionModel().getSelectedIndex();
@@ -1076,22 +1077,8 @@ public class ClinicManagerController {
      *Clear all data on the schedule.
      */
     void clear(ActionEvent event){
-        aptDate.setValue(null);
-        fname.clear();
-        lname.clear();
-        birthDate.setValue(null);
-        apptType.selectToggle(null);
-        cmb_provider.setDisable(imagingApt.isSelected());
+        outputArea.clear();
     }
-    @FXML
-    /**
-     *Clear all data on reschedule.
-     */
-    void clearR(ActionEvent event){
-        aptDateR.setValue(null);
-        fnameR.clear();
-        lnameR.clear();
-        birthDateR.setValue(null);
-    }
+
 
 }
