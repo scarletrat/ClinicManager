@@ -42,7 +42,9 @@ public class ClinicManagerController {
     @FXML
     private ComboBox<String> cmb_timeslot;
     @FXML
-    private ComboBox<String> cmb_timeslotR;
+    private ComboBox<String> cmb_newTimeslotR;
+    @FXML
+    private ComboBox<String> cmb_oldTimeslotR;
     @FXML
     private TextArea outputArea;
     @FXML
@@ -63,6 +65,14 @@ public class ClinicManagerController {
     private TextField fname;
     @FXML
     private TextField lname;
+    @FXML
+    private DatePicker aptDateR;
+    @FXML
+    private DatePicker birthDateR;
+    @FXML
+    private TextField fnameR;
+    @FXML
+    private TextField lnameR;
     ObservableList<String> providerNames;
     ObservableList<String> services;
 
@@ -81,7 +91,8 @@ public class ClinicManagerController {
         ObservableList<String> times =
                 FXCollections.observableArrayList(time);
         cmb_timeslot.setItems(times);
-
+        cmb_newTimeslotR.setItems(times);
+        cmb_oldTimeslotR.setItems(times);
         ObservableList<Location> locations =
                 FXCollections.observableArrayList(Location.values());
         tbl_location.setItems(locations);
@@ -217,8 +228,12 @@ public class ClinicManagerController {
         // Set the items and prompt text based on the selected radio button
         if (imagingApt.isSelected()) {
             cmb_provider.setItems(services);
+            cmb_provider.setItems(providerNames);
+            cmb_provider.setItems(services);
             cmb_provider.setPromptText("Service");
         } else {
+            cmb_provider.setItems(providerNames);
+            cmb_provider.setItems(services);
             cmb_provider.setItems(providerNames);
             cmb_provider.setPromptText("Providers");
         }
@@ -461,11 +476,21 @@ public class ClinicManagerController {
     }
 
     /**
+     * Get the old timeslot.
+     * @return the inputted timeslot as Timeslot object.
+     */
+    private Timeslot getOldTimeslotR(){
+        int index = cmb_oldTimeslotR.getSelectionModel().getSelectedIndex() + 1;
+        String idi = String.valueOf(index);
+        return new Timeslot(idi);
+    }
+
+    /**
      * Get the rescheduled timeslot.
      * @return the inputted timeslot as Timeslot object.
      */
-    private Timeslot getTimeslotR(){
-        int index = cmb_timeslotR.getSelectionModel().getSelectedIndex() + 1;
+    private Timeslot getNewTimeslotR(){
+        int index = cmb_newTimeslotR.getSelectionModel().getSelectedIndex() + 1;
         String idi = String.valueOf(index);
         return new Timeslot(idi);
     }
@@ -493,25 +518,11 @@ public class ClinicManagerController {
      * Check if they selected a timeslot for the appointment.
      * @return true if they did, return false otherwise.
      */
-    private boolean checkTimeslot(){
+    private boolean checkTimeslot() {
         int timeslotIndex = cmb_timeslot.getSelectionModel().getSelectedIndex();
-        Timeslot timeslot = new Timeslot(String.valueOf(timeslotIndex));
+        Timeslot timeslot = new Timeslot(String.valueOf(timeslotIndex+1));
         if(timeslot.getHour()==0&&timeslot.getMinute()==0){
             outputArea.appendText("Please select a timeslot.\n");
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Check if they selected a timeslot for the appointment.
-     * @return true if they did, return false otherwise.
-     */
-    private boolean checkTimeslotR(){
-        int timeslotIndex = cmb_timeslotR.getSelectionModel().getSelectedIndex();
-        Timeslot timeslot = new Timeslot(String.valueOf(timeslotIndex));
-        if(timeslot.getHour()==0&&timeslot.getMinute()==0){
-            outputArea.appendText("Please select a timeslot to reschedule.\n");
             return false;
         }
         return true;
@@ -647,25 +658,25 @@ public class ClinicManagerController {
      * Reschedule an existing office type appointment with the same provider.
      */
     void rescheduleApt(ActionEvent event){
-        if(!isValidAppointmentDate()){
+        if(!isValidAppointmentDateR()){
             return;
         }
-        if(fname.getText().isEmpty() || lname.getText().isEmpty()){
+        if(fnameR.getText().isEmpty() || lnameR.getText().isEmpty()){
             outputArea.appendText("Please input your name.\n");
             return;
         }
-        if(!isValidDob() || !checkTimeslot() || !checkTimeslotR()){
+        if(!isValidDobR() || !checkOldTimeslotR() || !checkNewTimeslotR()){
             return;
         }
-        Date date = getAptDate();
-        Timeslot timeslot = getTimeslot();
-        Profile profile = getPatient().getProfile();
+        Date date = getAptDateR();
+        Timeslot timeslot = getOldTimeslotR();
+        Profile profile = getPatientR().getProfile();
         if (isValidAppointment(profile, date, timeslot)) {
             outputArea.appendText( date+ " " + timeslot + " " + profile + " does not exist.\n");
             return;
         }
         outputArea.appendText(date + " " + timeslot + " " + profile + " - appointment does not exist.\n");
-        Timeslot newTimeslot = getTimeslotR();
+        Timeslot newTimeslot = getNewTimeslotR();
         //do they have the appointment at the newTimeslot?
         if(hasAppointmentAtTimeslot(date,newTimeslot,profile)){
             outputArea.appendText( profile + " has an existing appointment at " + date + " " + newTimeslot +"\n");
@@ -684,6 +695,98 @@ public class ClinicManagerController {
         outputArea.appendText( doc + " is not available at slot " + newTimeslot+"\n");
     }
 
+    /**
+     * Check if the new appointment date is valid reschedule date.
+     * @return true if it's valid, return false otherwise.
+     */
+    private boolean isValidAppointmentDateR() {
+        //dates[0] = year, 1 = month, 2 = date
+        LocalDate date = aptDateR.getValue();
+        if (date == null) {
+            outputArea.appendText("Please input an appointment date.\n");
+            return false;
+        }
+        String[] dates = date.toString().split("-");
+        Date aptDate = new Date(dates[1],dates[2],dates[0]);
+        if (aptDate.isPast() || aptDate.isToday()) {
+            outputArea.appendText ("Appointment date: " + aptDate + " is today or a date before today.\n");
+            return false;
+        }
+        if (!aptDate.isWeekDay()) {
+            outputArea.appendText ("Appointment date: " + aptDate + " is Saturday or Sunday.\n");
+            return false;
+        }
+        if (!aptDate.within6MonthFromToday()) {
+            outputArea.appendText ("Appointment date: " + aptDate + " is not within six months.\n");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Get the patient.
+     * @return Person object of patient.
+     */
+    private Person getPatientR(){
+        LocalDate date = birthDateR.getValue();
+        Date dob = getDate(date);
+        return new Person(fnameR.getText(),lnameR.getText(), dob);
+    }
+    /**
+     * Get reschedule date.
+     * @return Date object of the appointment date.
+     */
+    private Date getAptDateR(){
+        LocalDate date = aptDateR.getValue();
+        return getDate(date);
+    }
+
+    /**
+     * Check if the new inputted birthdate is a valid birthdate.
+     * @return true if the birthDate is valid, return false otherwise.
+     */
+    private boolean isValidDobR() {
+        LocalDate date = birthDateR.getValue();
+        if (date == null) {
+            outputArea.appendText("Please input your date of birth.\n");
+            return false;
+        }
+        String[] dates = date.toString().split("-");
+        Date birthDate = new Date(dates[1],dates[2],dates[0]);
+        if (birthDate.isFuture() || birthDate.isToday()) {
+            outputArea.appendText ("Patient dob: " + birthDate + " is today or a date after today.\n");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if they selected an old timeslot for reschedule.
+     * @return true if they did, return false otherwise.
+     */
+    private boolean checkOldTimeslotR() {
+        int timeslotIndex = cmb_oldTimeslotR.getSelectionModel().getSelectedIndex();
+        Timeslot timeslot = new Timeslot(String.valueOf(timeslotIndex+1));
+        if(timeslot.getHour()==0&&timeslot.getMinute()==0){
+            outputArea.appendText("Please select a timeslot.\n");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if they selected an old timeslot for reschedule.
+     * @return true if they did, return false otherwise.
+     */
+    private boolean checkNewTimeslotR() {
+        int timeslotIndex = cmb_newTimeslotR.getSelectionModel().getSelectedIndex();
+        Timeslot timeslot = new Timeslot(String.valueOf(timeslotIndex+1));
+        if(timeslot.getHour()==0&&timeslot.getMinute()==0){
+            outputArea.appendText("Please select a timeslot.\n");
+            return false;
+        }
+        return true;
+    }
     /**
      * Find if the patient has the appointment at the time specified.
      * @param date the appointment date.
@@ -947,7 +1050,7 @@ public class ClinicManagerController {
 
     @FXML
     /**
-     *Clear all data on the screen.
+     *Clear all data on the schedule.
      */
     void clear(ActionEvent event){
         aptDate.setValue(null);
@@ -956,6 +1059,16 @@ public class ClinicManagerController {
         birthDate.setValue(null);
         apptType.selectToggle(null);
         cmb_provider.setDisable(imagingApt.isSelected());
+    }
+    @FXML
+    /**
+     *Clear all data on reschedule.
+     */
+    void clearR(ActionEvent event){
+        aptDateR.setValue(null);
+        fnameR.clear();
+        lnameR.clear();
+        birthDateR.setValue(null);
     }
 
 }
