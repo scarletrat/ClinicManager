@@ -64,6 +64,8 @@ public class ClinicManagerController {
     @FXML
     private TextField lname;
     ObservableList<String> providerNames;
+    ObservableList<String> services;
+
 
     @FXML
     /**
@@ -111,6 +113,7 @@ public class ClinicManagerController {
         loadProvidersFromFile(sourceFile, providers, technicians);
         updateProvidersTable(providers);
         displayProviderList();
+        cmb_provider.getSelectionModel().clearSelection();
         outputArea.appendText("Rotation list for the technicians.\n");
         createRotation();
     }
@@ -162,18 +165,17 @@ public class ClinicManagerController {
             names[i] = profile.getFname() + " " + profile.getLname() + " (" + ((Doctor) providers.get(i)).getnpi() + ")";
         }
 
+        services = FXCollections.observableArrayList();
+        for (Radiology.Service service : Radiology.Service.values()) {
+            services.add(service.toString()); // Or specialty.toString()
+        }
         providerNames = FXCollections.observableArrayList(names);
         cmb_provider.setItems(providerNames);
+        if(imagingApt.isSelected()){
+            cmb_provider.setItems(services);
+        }
         outputArea.appendText("Providers Loaded\n");
         loadButton.setDisable(true);
-        if(imagingApt.isSelected()){
-            ObservableList<String> services = FXCollections.observableArrayList();
-            for (Radiology.Service service : Radiology.Service.values()) {
-                services.add(service.toString()); // Or specialty.toString()
-            }
-            cmb_provider.setItems(services);
-            cmb_provider.setPromptText("Service");
-        }
     }
 
     /**
@@ -212,15 +214,11 @@ public class ClinicManagerController {
      * An event handler to disable Provider comboBox when Imaging is selected.
      */
     void imagingSelected(ActionEvent event) {
-        if(imagingApt.isSelected()){
-            ObservableList<String> services = FXCollections.observableArrayList();
-            for (Radiology.Service service : Radiology.Service.values()) {
-                services.add(service.toString()); // Or specialty.toString()
-            }
+        // Set the items and prompt text based on the selected radio button
+        if (imagingApt.isSelected()) {
             cmb_provider.setItems(services);
-            cmb_provider.setPromptText("Imaging Type");
-        }
-        else{
+            cmb_provider.setPromptText("Service");
+        } else {
             cmb_provider.setItems(providerNames);
             cmb_provider.setPromptText("Providers");
         }
@@ -289,6 +287,10 @@ public class ClinicManagerController {
         }
         if(cmb_provider.getValue()==null){
             outputArea.appendText("Please select an Imaging Service.\n");
+            return;
+        }
+        if(providers.isEmpty()){
+            outputArea.appendText("Please load providers.\n");
             return;
         }
         Person patient = getPatient();
@@ -808,25 +810,44 @@ public class ClinicManagerController {
             outputArea.appendText("Schedule calendar is empty.\n");
             return;
         }
-        Sort.appointment(appointments,'P');
-        for(int i =0; i< appointments.size(); i++){
-            Appointment appointment = appointments.get(i);
-            Patient patient = new Patient(appointment.getPatient().getProfile(), appointment);
-            if(patients.isEmpty()){
-                patients.add(patient);
-            }else{
-                if(patients.contains(patient)){
-                    int index = patients.indexOf(patient);
-                    patients.get(index).addVisit(appointment);
-                }else{
-                    patients.add(patient);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Printing the billing statements for all patients will remove all appointments from the scheduler.");
+        alert.setContentText("Do you want to proceed with the command?");
+
+        // Customize the button types
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        alert.getButtonTypes().setAll(yesButton, noButton);
+
+        // Show the alert and wait for the response
+        alert.showAndWait().ifPresent(response -> {
+            if (response == yesButton) {
+                // Execute the command only if "Yes" is selected
+                Sort.appointment(appointments,'P');
+                for(int i =0; i< appointments.size(); i++){
+                    Appointment appointment = appointments.get(i);
+                    Patient patient = new Patient(appointment.getPatient().getProfile(), appointment);
+                    if(patients.isEmpty()){
+                        patients.add(patient);
+                    }else{
+                        if(patients.contains(patient)){
+                            int index = patients.indexOf(patient);
+                            patients.get(index).addVisit(appointment);
+                        }else{
+                            patients.add(patient);
+                        }
+                    }
                 }
+                outputArea.appendText(("\n** Billing statement ordered by patient. **\n"));
+                printChargePerPatient(patients);
+                outputArea.appendText("** end of list **\n");
+                appointments = new List<>();
+            } else {
+                outputArea.appendText("Operation canceled.\n");
             }
-        }
-        outputArea.appendText(("\n** Billing statement ordered by patient. **\n"));
-        printChargePerPatient(patients);
-        outputArea.appendText("** end of list **\n");
-        appointments = new List<>();
+        });
+
     }
 
     /**
