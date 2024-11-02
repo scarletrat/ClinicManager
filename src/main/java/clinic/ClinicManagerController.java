@@ -956,8 +956,6 @@ public class ClinicManagerController {
         birthDate.setValue(null);
         apptType.selectToggle(null);
         cmb_provider.setDisable(imagingApt.isSelected());
-        cmb_timeslot.getSelectionModel().clearSelection();
-        cmb_provider.getSelectionModel().clearSelection();
     }
 
 }
