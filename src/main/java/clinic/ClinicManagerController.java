@@ -14,6 +14,7 @@ import util.*;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Time;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -658,14 +659,11 @@ public class ClinicManagerController {
      * Reschedule an existing office type appointment with the same provider.
      */
     void rescheduleApt(ActionEvent event){
-        if(!isValidAppointmentDateR()){
+        if(!isValidAppointmentDateR() || !isValidDobR() || !checkOldTimeslotR() || !checkNewTimeslotR()){
             return;
         }
         if(fnameR.getText().isEmpty() || lnameR.getText().isEmpty()){
             outputArea.appendText("Please input your name.\n");
-            return;
-        }
-        if(!isValidDobR() || !checkOldTimeslotR() || !checkNewTimeslotR()){
             return;
         }
         Date date = getAptDateR();
@@ -675,14 +673,16 @@ public class ClinicManagerController {
             outputArea.appendText( date+ " " + timeslot + " " + profile + " does not exist.\n");
             return;
         }
-        outputArea.appendText(date + " " + timeslot + " " + profile + " - appointment does not exist.\n");
+        if(hasAppointmentAtTimeslot(date,getNewTimeslotR(),profile)){
+            outputArea.appendText( getPatient() + " has an existing appointment at " + date + " " + getNewTimeslotR()+"\n");
+            return;
+        }
         Timeslot newTimeslot = getNewTimeslotR();
-        //do they have the appointment at the newTimeslot?
         if(hasAppointmentAtTimeslot(date,newTimeslot,profile)){
             outputArea.appendText( profile + " has an existing appointment at " + date + " " + newTimeslot +"\n");
             return;
         }
-        //is the provider free at that timeslot?
+        if(!isImaging(profile,date,timeslot)) return;
         Doctor doc = findDoctor(profile,date,timeslot);
         if(isDoctorFree(date, newTimeslot, doc)){
             Appointment old = new Appointment(date,timeslot,getPatient(),doc);
@@ -695,6 +695,18 @@ public class ClinicManagerController {
         outputArea.appendText( doc + " is not available at slot " + newTimeslot+"\n");
     }
 
+    private boolean isImaging(Profile profile, Date date, Timeslot timeslot){
+        for (int i = 0; i < appointments.size(); i++) {
+            Appointment appointment = appointments.get(i);
+            if (appointment.getPatient().getProfile().equals(profile) && appointment.getDate().equals(date) && appointment.getTimeslot().equals(timeslot)) {
+                if(appointment instanceof Imaging){
+                    outputArea.appendText("Cannot reschedule an Imaging Appointment.\n");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     /**
      * Check if the new appointment date is valid reschedule date.
      * @return true if it's valid, return false otherwise.
