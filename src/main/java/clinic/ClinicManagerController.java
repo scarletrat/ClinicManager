@@ -682,7 +682,7 @@ public class ClinicManagerController {
             outputArea.appendText( profile + " has an existing appointment at " + date + " " + newTimeslot +"\n");
             return;
         }
-        if(!isImaging(profile,date,timeslot)) return;
+        if(isImaging(profile,date,timeslot)) return;
         Doctor doc = findDoctor(profile,date,timeslot);
         if(isDoctorFree(date, newTimeslot, doc)){
             Appointment old = new Appointment(date,timeslot,getPatient(),doc);
@@ -695,17 +695,24 @@ public class ClinicManagerController {
         outputArea.appendText( doc + " is not available at slot " + newTimeslot+"\n");
     }
 
+    /**
+     * Checks to see if the imaging appointment exists in the list
+     * @param profile profile of imaging appointment
+     * @param date date of imaging appointment
+     * @param timeslot timeslot of imaging appointment
+     * @return true if it exists, false otherwise
+     */
     private boolean isImaging(Profile profile, Date date, Timeslot timeslot){
         for (int i = 0; i < appointments.size(); i++) {
             Appointment appointment = appointments.get(i);
             if (appointment.getPatient().getProfile().equals(profile) && appointment.getDate().equals(date) && appointment.getTimeslot().equals(timeslot)) {
                 if(appointment instanceof Imaging){
                     outputArea.appendText("Cannot reschedule an Imaging Appointment.\n");
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
     /**
      * Check if the new appointment date is valid reschedule date.
@@ -834,6 +841,10 @@ public class ClinicManagerController {
         return null;
     }
 
+    /**
+     * prints the appointments based on the command that is selected in the options combo box
+     * @param event the print button is clicked
+     */
     @FXML
     void printButton(ActionEvent event){
         if(cmb_options.getValue()==null){
@@ -902,7 +913,7 @@ public class ClinicManagerController {
 
     /**
      * This method does the PL command. Print the list of appointments;
-     * ordered by patient/date/time.
+     * ordered by county/date/time.
      */
     private void PL_Command() {
         if (!appointments.isEmpty()) {

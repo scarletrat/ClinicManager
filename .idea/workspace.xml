@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="print">
+    <list default="true" id="7a87c309-51e0-4907-97f8-a38cc62156cf" name="Changes" comment="combobox imaging type">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/clinic/ClinicManagerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +33,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/scarletrat/ClinicManager.git&quot;,
-    &quot;accountId&quot;: &quot;b9828ce2-e6d1-440f-8321-6ffcaa4299a8&quot;
+    &quot;accountId&quot;: &quot;e5d41d5d-7b12-46dd-aecf-3ae1388a27c9&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -61,7 +60,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/swimd/Downloads/EventHandlerInterface/EventHandlerInterface&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/chris/IdeaProjects/ClinicManager&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
@@ -114,15 +113,7 @@
       <option name="project" value="LOCAL" />
       <updated>1730496058695</updated>
     </task>
-    <task id="LOCAL-00006" summary="print">
-      <option name="closed" value="true" />
-      <created>1730506475078</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1730506475078</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
